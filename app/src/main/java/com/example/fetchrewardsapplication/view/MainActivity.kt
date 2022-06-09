@@ -40,15 +40,10 @@ class MainActivity : AppCompatActivity() {
         itemsViewModel.itemsLiveData.observe(this) { it ->
             items = it
             setUpRV(items)
-            items.forEach{
-                Log.d("TAG_Q", "item " + "listId: " + it.listId + " id: " +it.id + " name: " +it.name)
-            }
         }
-
         itemsViewModel.noResultsLiveData.observe(this) {
             Toast.makeText(this, items.size, Toast.LENGTH_SHORT).show()
         }
-
         itemsViewModel.getItems()
     }
 

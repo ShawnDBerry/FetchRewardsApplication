@@ -29,8 +29,8 @@ class ItemsRVAdapter(private var items: ArrayList<Item>) :
     }
 
     override fun onBindViewHolder(holder: ItemsAdapterViewHolder, position: Int) {
-        holder.itemId.text = items[position].id.toString()
-        holder.listId.text = items[position].listId.toString()
-        holder.itemName.text = items[position].name
+        holder.itemId.text = "ID: " + items[position].id.toString()
+        holder.listId.text = "List ID: " + items[position].listId.toString()
+        holder.itemName.text = "Name: " + items[position].name
     }
 }
