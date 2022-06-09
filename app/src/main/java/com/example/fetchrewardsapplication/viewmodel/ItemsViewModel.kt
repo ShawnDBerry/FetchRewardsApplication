@@ -15,9 +15,10 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
     val loading = MutableLiveData<Boolean>()
     fun getItems() {
         CoroutineScope(Dispatchers.IO).launch {
-            var response = itemsRepository.getItems()
-            var body = response.body()
+            val response = itemsRepository.getItems()
+            val body = response.body()
             if (response.isSuccessful) {
+                body?.filter { it.name != null || it.name != "" }
                 body?.sortWith(compareBy({ it.name }, { it.listId }))
             withContext(Dispatchers.Main) {
                     loading.value = false
