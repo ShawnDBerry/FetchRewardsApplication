@@ -31,10 +31,12 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.items_recyclerview)
         val retrofitService = ItemsRetrofitInstance()
         val itemsRepository = ItemsRepository(retrofitService)
+
         itemsViewModel = ViewModelProvider(
             this,
             ItemsViewModelFactory(itemsRepository)
         ).get(ItemsViewModel::class.java)
+
         itemsViewModel.itemsLiveData.observe(this) { it ->
             items = it
             setUpRV(items)
@@ -42,9 +44,11 @@ class MainActivity : AppCompatActivity() {
                 Log.d("TAG_Q", "item " + "listId: " + it.listId + " id: " +it.id + " name: " +it.name)
             }
         }
+
         itemsViewModel.noResultsLiveData.observe(this) {
             Toast.makeText(this, items.size, Toast.LENGTH_SHORT).show()
         }
+
         itemsViewModel.getItems()
     }
 
@@ -53,10 +57,6 @@ class MainActivity : AppCompatActivity() {
         layoutManager = LinearLayoutManager(this)
         recyclerView?.adapter = itemsRVAdapter
         recyclerView?.layoutManager = layoutManager
-        val decorater: RecyclerView.ItemDecoration =
-            DividerItemDecoration(this, RecyclerView.VERTICAL)
-        recyclerView?.addItemDecoration(decorater)
-
     }
 }
 
