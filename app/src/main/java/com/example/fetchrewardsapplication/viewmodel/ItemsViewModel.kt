@@ -19,8 +19,8 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
             val body = response.body()
             if (response.isSuccessful) {
                 body?.sortWith(compareBy({ it.listId }, { it.name }))
-                body?.removeAll{it.name == null || it.name == ""}
-            withContext(Dispatchers.Main) {
+                body?.filter { it.name == null || it.name == "" }
+                withContext(Dispatchers.Main) {
                     updateLiveData(body)
                     loading.value = false
                 }
