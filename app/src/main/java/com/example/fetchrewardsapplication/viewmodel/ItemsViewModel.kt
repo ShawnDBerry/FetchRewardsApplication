@@ -3,23 +3,25 @@ package com.example.fetchrewardsapplication.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.fetchrewardsapplication.model.Item
-import com.example.fetchrewardsapplication.network.ItemsRetrofitInstance
 import com.example.fetchrewardsapplication.repository.ItemsRepository
-import io.reactivex.internal.subscriptions.SubscriptionHelper.cancel
 import kotlinx.coroutines.*
-import okhttp3.Dispatcher
 
 class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel() {
     val itemsLiveData = MutableLiveData<ArrayList<Item>>()
     val noResultsLiveData = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
+
     fun getItems() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = itemsRepository.getItems()
             val body = response.body()
+            /*body?.groupBy's not working for some weird reason but sortby
+            * does the same operations*/
+            body?.sortWith(compareBy({ it.listId }, { it.id }, {it.name}))
+            /*body?.filter's  not working for some weird reason but sortby
+            * does the same operation*/
+            body?.removeAll { it.name == null || it.name == "" }
             if (response.isSuccessful) {
-                body?.sortWith(compareBy({ it.listId }, { it.name }))
-                body?.filter { it.name == null || it.name == "" }
                 withContext(Dispatchers.Main) {
                     updateLiveData(body)
                     loading.value = false
