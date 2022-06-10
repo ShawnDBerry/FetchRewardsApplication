@@ -1,16 +1,11 @@
 package com.example.fetchrewardsapplication.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.fetchrewardsapplication.R
 import com.example.fetchrewardsapplication.adapter.ItemsRVAdapter
+import com.example.fetchrewardsapplication.databinding.ActivityMainBinding
 import com.example.fetchrewardsapplication.model.Item
 import com.example.fetchrewardsapplication.network.ItemsRetrofitInstance
 import com.example.fetchrewardsapplication.repository.ItemsRepository
@@ -20,38 +15,31 @@ import com.example.fetchrewardsapplication.viewmodel.ItemsViewModelFactory
 class MainActivity : AppCompatActivity() {
     lateinit var itemsViewModel: ItemsViewModel
     lateinit var itemsRVAdapter: ItemsRVAdapter
-    private var layoutManager: RecyclerView.LayoutManager? = null
-    private var recyclerView: RecyclerView? = null
+    private var items = ArrayList<Item>()
+    private lateinit var binding: ActivityMainBinding
 
-    var items = ArrayList<Item>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.items_recyclerview)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val retrofitService = ItemsRetrofitInstance()
         val itemsRepository = ItemsRepository(retrofitService)
+        itemsViewModel = ViewModelProvider(this, ItemsViewModelFactory(itemsRepository))
+            .get(ItemsViewModel::class.java)
 
-        itemsViewModel = ViewModelProvider(
-            this,
-            ItemsViewModelFactory(itemsRepository)
-        ).get(ItemsViewModel::class.java)
-
-        itemsViewModel.itemsLiveData.observe(this) { it ->
+        itemsViewModel.itemsLiveData.observe(this) {
             items = it
             setUpRV(items)
         }
-        itemsViewModel.noResultsLiveData.observe(this) {
-            Toast.makeText(this, items.size, Toast.LENGTH_SHORT).show()
+        itemsViewModel.errorMessage.observe(this) {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
         itemsViewModel.getItems()
     }
-
     private fun setUpRV(result: ArrayList<Item>) {
-        itemsRVAdapter = ItemsRVAdapter(result)
-        layoutManager = LinearLayoutManager(this)
-        recyclerView?.adapter = itemsRVAdapter
-        recyclerView?.layoutManager = layoutManager
+        itemsRVAdapter = ItemsRVAdapter(this, result)
+        binding.itemsRecyclerview.adapter = itemsRVAdapter
     }
 }
 

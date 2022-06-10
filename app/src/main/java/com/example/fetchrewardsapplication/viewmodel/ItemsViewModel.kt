@@ -8,47 +8,42 @@ import kotlinx.coroutines.*
 
 class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel() {
     val itemsLiveData = MutableLiveData<ArrayList<Item>>()
-    val noResultsLiveData = MutableLiveData<Boolean>()
-    val loading = MutableLiveData<Boolean>()
+    val errorMessage = MutableLiveData<String>()
+    private var job: Job? = null
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        onError("Exception handled: ${throwable.localizedMessage}")
+    }
 
     fun getItems() {
-        CoroutineScope(Dispatchers.IO).launch {
+        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = itemsRepository.getItems()
             val body = response.body()
             /*body?.groupBy's not working for some weird reason but sortby
             * does the same operations*/
-            body?.sortWith(compareBy({ it.listId }, { it.id }, {it.name}))
+            body?.sortWith(compareBy({ it.listId }, { it.id }, { it.name }))
             /*body?.filter's  not working for some weird reason but sortby
             * does the same operation*/
             body?.removeAll { it.name == null || it.name == "" }
-            if (response.isSuccessful) {
-                withContext(Dispatchers.Main) {
+            if (response.isSuccessful)
+            withContext(Dispatchers.Main) {
                     updateLiveData(body)
-                    loading.value = false
                 }
-            }
+             else
+                onError("Error : ${response.message()} ")
         }
     }
-
     private fun updateLiveData(list: ArrayList<Item>?) {
-        if (list != null && list.size != 0) {
+        if (list != null && list.size != 0)
             itemsLiveData.value = (itemsLiveData.value?.apply {
                 addAll(list)
             }) ?: list
-        } else {
-            noResults()
-        }
     }
-
-    private fun noResults() {
-        noResultsLiveData.value = (noResultsLiveData.value)?.let {
-            loading.value = false
-            !it
-        } ?: true
+    private fun onError(message: String) {
+        errorMessage.value = message
     }
-
     override fun onCleared() {
         super.onCleared()
-        CoroutineScope(Dispatchers.Default).cancel()
+        job?.cancel()
     }
 }
+

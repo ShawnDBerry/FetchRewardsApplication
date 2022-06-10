@@ -6,12 +6,10 @@ import com.example.fetchrewardsapplication.repository.ItemsRepository
 
 class ItemsViewModelFactory constructor(private val repository: ItemsRepository): ViewModelProvider.Factory
  {
-     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-         return if (modelClass.isAssignableFrom(ItemsViewModel::class.java)) {
+     override fun <T : ViewModel> create(modelClass: Class<T>): T {
+         return if (modelClass.isAssignableFrom(ItemsViewModel::class.java))
              ItemsViewModel(this.repository) as T
-         } else {
+          else
              throw IllegalArgumentException("ViewModel Not Found")
-         }
      }
-
  }
