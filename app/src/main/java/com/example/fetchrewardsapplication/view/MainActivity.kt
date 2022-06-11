@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.fetchrewardsapplication.adapter.ItemsRVAdapter
 import com.example.fetchrewardsapplication.databinding.ActivityMainBinding
-import com.example.fetchrewardsapplication.model.Item
 import com.example.fetchrewardsapplication.network.ItemsRetrofitInstance
 import com.example.fetchrewardsapplication.repository.ItemsRepository
 import com.example.fetchrewardsapplication.viewmodel.ItemsViewModel
