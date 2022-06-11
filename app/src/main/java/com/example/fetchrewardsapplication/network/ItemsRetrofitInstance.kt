@@ -9,9 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ItemsRetrofitInstance {
     private var itemsService: ItemsService
 
-    init {
-        this.itemsService = createService(retrofitInstance())
-    }
+    init { this.itemsService = createService(retrofitInstance()) }
 
     private fun retrofitInstance(): Retrofit {
         return Retrofit.Builder()
