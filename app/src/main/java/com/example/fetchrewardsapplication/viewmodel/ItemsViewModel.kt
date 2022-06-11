@@ -25,7 +25,9 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
             * does the same operation*/
             body?.removeAll { it.name == null || it.name == "" }
             if (response.isSuccessful)
-            withContext(Dispatchers.Main) { updateLiveData(body) }
+            withContext(Dispatchers.Main) {
+                updateLiveData(body)
+            }
              else
                 onError("Error : ${response.message()} ")
         }
