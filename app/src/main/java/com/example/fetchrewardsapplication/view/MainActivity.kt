@@ -14,32 +14,27 @@ import com.example.fetchrewardsapplication.viewmodel.ItemsViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     lateinit var itemsViewModel: ItemsViewModel
-    lateinit var itemsRVAdapter: ItemsRVAdapter
-    private var items = ArrayList<Item>()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         val retrofitService = ItemsRetrofitInstance()
         val itemsRepository = ItemsRepository(retrofitService)
+
         itemsViewModel = ViewModelProvider(this, ItemsViewModelFactory(itemsRepository))
             .get(ItemsViewModel::class.java)
 
         itemsViewModel.itemsLiveData.observe(this) {
-            items = it
-            setUpRV(items)
+            binding.itemsRecyclerview.adapter = ItemsRVAdapter(this, it)
         }
         itemsViewModel.errorMessage.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
         itemsViewModel.getItems()
     }
-    private fun setUpRV(result: ArrayList<Item>) {
-        itemsRVAdapter = ItemsRVAdapter(this, result)
-        binding.itemsRecyclerview.adapter = itemsRVAdapter
-    }
+
 }
 
