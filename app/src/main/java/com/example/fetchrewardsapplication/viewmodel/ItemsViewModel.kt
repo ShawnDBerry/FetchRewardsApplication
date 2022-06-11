@@ -25,7 +25,7 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
             if (response.isSuccessful)
                 withContext(Dispatchers.Main) { updateLiveData(body) }
             else
-                withContext(Dispatchers.Main) { onError("Error : ${response.message()} ") }
+                withContext(Dispatchers.Main) { onError("Error : ${response.message()}") }
         }
     }
     private fun updateLiveData(list: ArrayList<Item>?) {
