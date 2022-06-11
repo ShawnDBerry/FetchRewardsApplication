@@ -23,6 +23,4 @@ class ItemsRetrofitInstance {
     suspend fun getItems(): Response<ArrayList<Item>> {
         return itemsService.getItems()
     }
-
-
 }

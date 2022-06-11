@@ -13,7 +13,6 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError("Exception handled: ${throwable.localizedMessage}")
     }
-
     fun getItems() {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = itemsRepository.getItems()
@@ -40,4 +39,3 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
         job?.cancel()
     }
 }
-
