@@ -7,5 +7,5 @@ Inside ItemsViewModel.kt after retrieving the data i peform a group sort and fil
 side notes:
 kotlin functions i wanted to use to manipulate the list but wasn't able.
 
-response.body?.groupBy's not working for some weird reason but sortby does the same operations 
-response.body?.filter's  not working for some weird reason but sortby does the same operations
+response.body?.groupBy's not working for some weird reason but sortby() does the same operations 
+response.body?.filter's  not working for some weird reason but removeAll() does the same operations
