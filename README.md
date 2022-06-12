@@ -4,7 +4,8 @@ coroutines Dispatchers.IO displaying the data in a RecyclerView to the MainActiv
 View Binding updating the MutableLiveData list or displaying the error in a toast on the
 Dispatchers.Main.
 
-The recycler view implements data binding binding the item_layout views to the Item model.
+The recycler view implements data binding binding the item_layout TextView text attributes
+to the Item model object.
 
 Producing the ItemViewModel via ViewModelFactory retrieving the data from the itemsRepository.
 performing a group sort and filter operations on the list before serving the data on the 
