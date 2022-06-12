@@ -11,7 +11,7 @@ class ItemsRVAdapter(private var items: ArrayList<Item>) :
 
     class ItemsAdapterViewHolder(private val binding: ItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root){
-        fun bind(item: Item) { binding.item = item }
+            fun bind(item: Item) { binding.item = item }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemsAdapterViewHolder {

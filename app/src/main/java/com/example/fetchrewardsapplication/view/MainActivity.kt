@@ -20,11 +20,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val retrofitService = ItemsRetrofitInstance()
-        val itemsRepository = ItemsRepository(retrofitService)
-
-        itemsViewModel = ViewModelProvider(this, ItemsViewModelFactory(itemsRepository))
-            .get(ItemsViewModel::class.java)
+        itemsViewModel =
+            ViewModelProvider(this, ItemsViewModelFactory(ItemsRepository(ItemsRetrofitInstance())))
+                .get(ItemsViewModel::class.java)
 
         itemsViewModel.itemsLiveData.observe(this) {
             binding.itemsRecyclerview.adapter = ItemsRVAdapter(it)
