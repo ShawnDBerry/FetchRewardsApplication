@@ -13,6 +13,7 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError("Exception handled: ${throwable.localizedMessage}")
     }
+
     fun getItems() {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = itemsRepository.getItems()
@@ -27,13 +28,14 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
                 withContext(Dispatchers.Main) { onError("Error : ${response.message()}") }
         }
     }
+
     private fun updateLiveData(list: ArrayList<Item>?) {
         if (list != null && list.size != 0)
             itemsLiveData.value = (itemsLiveData.value?.apply { addAll(list) }) ?: list
     }
-    private fun onError(message: String) {
-        errorMessage.value = message
-    }
+
+    private fun onError(message: String) { errorMessage.value = message }
+
     override fun onCleared() {
         super.onCleared()
         job?.cancel()

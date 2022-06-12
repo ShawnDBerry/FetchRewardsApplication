@@ -12,7 +12,7 @@ import com.example.fetchrewardsapplication.viewmodel.ItemsViewModel
 import com.example.fetchrewardsapplication.viewmodel.ItemsViewModelFactory
 
 class MainActivity : AppCompatActivity() {
-    lateinit var itemsViewModel: ItemsViewModel
+    private lateinit var itemsViewModel: ItemsViewModel
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,12 +27,13 @@ class MainActivity : AppCompatActivity() {
             .get(ItemsViewModel::class.java)
 
         itemsViewModel.itemsLiveData.observe(this) {
-            binding.itemsRecyclerview.adapter = ItemsRVAdapter(this, it)
+            binding.itemsRecyclerview.adapter = ItemsRVAdapter(it)
         }
+
         itemsViewModel.errorMessage.observe(this) {
             Toast.makeText(this, it, Toast.LENGTH_LONG).show()
         }
+
         itemsViewModel.getItems()
     }
-
 }

@@ -17,9 +17,11 @@ class ItemsRetrofitInstance {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
     private fun createService(retrofit: Retrofit): ItemsService {
         return retrofit.create(ItemsService::class.java)
     }
+
     suspend fun getItems(): Response<ArrayList<Item>> {
         return itemsService.getItems()
     }
