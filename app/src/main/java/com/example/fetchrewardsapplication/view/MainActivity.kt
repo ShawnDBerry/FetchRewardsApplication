@@ -12,15 +12,12 @@ import com.example.fetchrewardsapplication.viewmodel.ItemsViewModel
 import com.example.fetchrewardsapplication.viewmodel.ItemsViewModelFactory
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var itemsViewModel: ItemsViewModel
-    private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+       val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        itemsViewModel =
+        val itemsViewModel =
             ViewModelProvider(this, ItemsViewModelFactory(ItemsRepository(ItemsRetrofitInstance())))
                 .get(ItemsViewModel::class.java)
 
