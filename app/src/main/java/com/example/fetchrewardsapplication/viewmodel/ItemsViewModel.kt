@@ -14,7 +14,7 @@ class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel()
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getItems() {
+   suspend fun getItems() {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = itemsRepository.getItems()
             val body = response.body()
