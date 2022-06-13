@@ -9,7 +9,7 @@ import com.example.fetchrewardsapplication.databinding.ActivityMainBinding
 import com.example.fetchrewardsapplication.network.ItemsRetrofitInstance
 import com.example.fetchrewardsapplication.repository.ItemsRepository
 import com.example.fetchrewardsapplication.viewmodel.ItemsViewModel
-import com.example.fetchrewardsapplication.viewmodel.ItemsViewModelFactory
+import com.example.fetchrewardsapplication.factory.ItemsViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

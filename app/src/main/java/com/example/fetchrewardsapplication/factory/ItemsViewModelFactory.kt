@@ -1,8 +1,9 @@
-package com.example.fetchrewardsapplication.viewmodel
+package com.example.fetchrewardsapplication.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.fetchrewardsapplication.repository.ItemsRepository
+import com.example.fetchrewardsapplication.viewmodel.ItemsViewModel
 
 class ItemsViewModelFactory constructor(private val repository: ItemsRepository): ViewModelProvider.Factory
  {
