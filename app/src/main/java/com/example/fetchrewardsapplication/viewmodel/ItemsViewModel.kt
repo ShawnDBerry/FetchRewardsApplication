@@ -29,7 +29,6 @@ class ItemsViewModel @Inject constructor(private val itemsRepository: ItemsRepos
     private fun getItems() {
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
            itemsRepository.getItems().let { response ->
-
                if (response.isSuccessful) {
                    response.body()?.sortWith(compareBy({ it.listId }, { it.id }, { it.name }))
                    response.body()?.removeAll { it.name == null || it.name == "" }
