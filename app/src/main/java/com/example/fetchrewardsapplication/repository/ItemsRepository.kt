@@ -1,7 +1,8 @@
 package com.example.fetchrewardsapplication.repository
 
-import com.example.fetchrewardsapplication.network.ItemsRetrofitInstance
+import com.example.fetchrewardsapplication.network.ItemsService
+import javax.inject.Inject
 
-class ItemsRepository constructor(private val itemRetrofit: ItemsRetrofitInstance) {
-    suspend fun getItems() = itemRetrofit.getItems()
+class ItemsRepository @Inject constructor(private val itemsService: ItemsService) {
+    suspend fun getItems() = itemsService.getItems()
 }

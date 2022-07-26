@@ -1,43 +1,54 @@
 package com.example.fetchrewardsapplication.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.fetchrewardsapplication.model.Item
 import com.example.fetchrewardsapplication.repository.ItemsRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import javax.inject.Inject
 
-class ItemsViewModel(private val itemsRepository: ItemsRepository) : ViewModel() {
-    val itemsLiveData = MutableLiveData<ArrayList<Item>>()
+
+@HiltViewModel
+class ItemsViewModel @Inject constructor(private val itemsRepository: ItemsRepository) : ViewModel() {
+    val itemsLiveData: LiveData<ArrayList<Item>>
+    get() = itemsLiveData
     val errorMessage = MutableLiveData<String>()
-    private var job: Job? = null
+
+    private val itemsLiveDataResponse = MutableLiveData<ArrayList<Item>?>()
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError("Exception handled: ${throwable.localizedMessage}")
     }
 
-    fun getItems() {
-        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = itemsRepository.getItems()
-            val body = response.body()
+    init {
+        getItems()
+    }
 
-            body?.sortWith(compareBy({ it.listId }, { it.id }, { it.name }))
-            body?.removeAll { it.name == null || it.name == "" }
+    private fun getItems() {
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+           itemsRepository.getItems().let { response ->
 
-            if (response.isSuccessful)
-                withContext(Dispatchers.Main) { updateLiveData(body) }
-            else
-                withContext(Dispatchers.Main) { onError("Error : ${response.message()}") }
+               if (response.isSuccessful) {
+                   response.body()?.sortWith(compareBy({ it.listId }, { it.id }, { it.name }))
+                   response.body()?.removeAll { it.name == null || it.name == "" }
+                   withContext(Dispatchers.Main) { updateLiveData(response.body()) }
+               }
+               else withContext(Dispatchers.Main) { onError("Error : ${response.message()}") }
+           }
         }
     }
 
     private fun updateLiveData(list: ArrayList<Item>?) {
         if (list != null && list.size != 0)
-            itemsLiveData.value = (itemsLiveData.value?.apply { addAll(list) }) ?: list
+            itemsLiveDataResponse.postValue(list)
     }
 
     private fun onError(message: String) { errorMessage.value = message }
 
     override fun onCleared() {
         super.onCleared()
-        job?.cancel()
+        viewModelScope.cancel()
     }
 }
