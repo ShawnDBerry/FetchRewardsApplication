@@ -13,11 +13,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ItemsViewModel @Inject constructor(private val itemsRepository: ItemsRepository) : ViewModel() {
-    val itemsLiveData: LiveData<ArrayList<Item>>
-    get() = itemsLiveData
     val errorMessage = MutableLiveData<String>()
-
     private val itemsLiveDataResponse = MutableLiveData<ArrayList<Item>?>()
+    val itemsLiveData: LiveData<ArrayList<Item>?>
+        get() = itemsLiveDataResponse
+
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         onError("Exception handled: ${throwable.localizedMessage}")
     }

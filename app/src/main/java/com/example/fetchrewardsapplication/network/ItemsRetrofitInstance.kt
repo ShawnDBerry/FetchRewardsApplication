@@ -14,8 +14,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ItemsRetrofitInstance {
 
-    @Provides
-    fun provideBaseUrl() = BASE_URL
+
+
 
     @Provides
     @Singleton
