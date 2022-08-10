@@ -15,17 +15,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val viewModel: ItemsViewModel by viewModels()
-        val itemsAdapter = ItemsRVAdapter()
-
-        viewModel.itemsLiveData.observe(this) {
-            binding.itemsRecyclerview.adapter = itemsAdapter
-            if (it !== null)
-                itemsAdapter.submitList(it)
-        }
-
-        viewModel.errorMessage.observe(this) {
-            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-        }
+//        val viewModel: ItemsViewModel by viewModels()
+//        val itemsAdapter = ItemsRVAdapter()
+//
+//        viewModel.itemsLiveData.observe(this) {
+//            binding.itemsRecyclerview.adapter = itemsAdapter
+//            if (it !== null)
+//                itemsAdapter.submitList(it)
+//        }
+//
+//        viewModel.errorMessage.observe(this) {
+//            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+//        }
     }
 }
